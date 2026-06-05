@@ -10,7 +10,7 @@ export default function Body() {
   const [videoSrc, setVideoSrc] = useState(null);
   const [showGift, setShowGift] = useState(false);
 
- const questions = [
+const questions = [
     {
       question: "What will you do if I text you 'I miss you'? 🌙",
       options: [
@@ -175,6 +175,29 @@ export default function Body() {
     }
   ];
 
+           
+const playVideo = (src) => {
+  setVideoSrc(src);
+
+  setTimeout(() => {
+    const video = document.querySelector("video");
+
+    if (video) {
+      video.muted = false;   // unmute try
+      video.volume = 1;
+
+      const playPromise = video.play();
+
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // fallback: keep muted if blocked
+          video.muted = true;
+          video.play();
+        });
+      }
+    }
+  }, 500);
+};
 
   const handleClick = (option) => {
     if (isLocked) return;
@@ -183,49 +206,37 @@ export default function Body() {
     setMessage(option.msg);
 
     if (option.correct) {
-      setVideoSrc("/smile.mp4");   // ✅ public folder
       setScore((prev) => prev + 1);
-
-      setTimeout(() => {
-        setMessage("");
-        setVideoSrc(null);
-        setQuestionIndex((prev) => prev + 1);
-        setIsLocked(false);
-      }, 3000);
-
+      playVideo("/smile.mp4");
     } else {
-      setVideoSrc("/ayoo.mp4");    // ✅ public folder
-
-      setTimeout(() => {
-        setMessage("");
-        setVideoSrc(null);
-        setIsLocked(false);
-      }, 3000);
+      playVideo("/ayoo.mp4");
     }
+
+    setTimeout(() => {
+      setMessage("");
+      setVideoSrc(null);
+      setQuestionIndex((prev) => prev + 1);
+      setIsLocked(false);
+    }, 3000);
   };
 
   if (questionIndex >= questions.length) {
     return (
       <div className="main-container finish-screen">
-
         <h1>🎉 Quiz Finished!</h1>
         <h2>Your Score: {score}/{questions.length}</h2>
 
         {!showGift ? (
-          <button
-            className="gift-button"
-            onClick={() => setShowGift(true)}
-          >
+          <button className="gift-button" onClick={() => setShowGift(true)}>
             🎁 Open Your Gift
           </button>
         ) : (
           <div className="gift-box">
-            <p className="your">You are someone who slowly became a special part of my life without even trying. The way you talk, the way you care, and the way you stay in my thoughts makes everything feel different and better. I may not always say it perfectly, but I truly care about you more than words can show. You matter to me in a way that feels calm, real, and important.
+ <p className="your">You are someone who slowly became a special part of my life without even trying. The way you talk, the way you care, and the way you stay in my thoughts makes everything feel different and better. I may not always say it perfectly, but I truly care about you more than words can show. You matter to me in a way that feels calm, real, and important.
 
               And honestly, I don’t want to just keep these feelings inside anymore. I want to be open with you — I like you, and I want to be someone who stands beside you, supports you, and cares for you in every small and big moment. If you feel even a little the same, I would love to grow something beautiful with you, step by step, together.❤️‍🔥🥰</p>
           </div>
         )}
-
       </div>
     );
   }
@@ -254,7 +265,7 @@ export default function Body() {
           </div>
         )}
 
-     {videoSrc && (
+        {videoSrc && (
           <div className="video-popup">
             <video
               key={videoSrc}
@@ -262,6 +273,7 @@ export default function Body() {
               autoPlay
               playsInline
               preload="auto"
+              controls
             />
           </div>
         )}
