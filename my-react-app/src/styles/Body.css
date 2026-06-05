@@ -1,0 +1,220 @@
+body{
+      background: linear-gradient(to top, #ff9a9e, #ff7650);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.main-container{
+
+    height: 244px;
+        display: flex;
+    flex-direction: column;
+    align-items: anchor-center;
+        margin: 100px;
+
+}
+.Head-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: blueviolet;
+   width: 212px;
+    border-radius: 20px;
+}
+.qusition-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+}
+.qustion{
+    font-size: 20px;
+
+}
+.qusition-container button{
+width: 239px;
+     height: 39px;
+    background-color: blueviolet;
+    border: none;
+    border-radius: 30px;
+        font-size: 15px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+          margin-top: 12px; 
+
+}
+
+.video{
+    margin-top: 20px;
+}
+.card {
+  margin-top: 20px;
+  padding: 15px;
+  background: #222;
+  color: white;
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* 🔥 Jump effect */
+.jump {
+  animation: jump 0.5s ease;
+}
+
+@keyframes jump {
+  0% {
+    transform: translateY(100px) scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-10px) scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+.video-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: black;
+  padding: 10px;
+  border-radius: 20px;
+  z-index: 999;
+  animation: popup 0.4s ease;
+}
+
+.video-popup video {
+  border-radius: 15px;
+  width: 300px;
+}
+
+@keyframes popup {
+  from {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+.gift-button{
+  background: pink;
+  border: none;
+  border-radius: 20px;
+  width: 150px;
+  height: 50px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+
+}
+/* ========================= */
+/* MOBILE VIEW (phones) */
+/* ========================= */
+
+@media (max-width: 768px) {
+  .main-container {
+    padding: 15px;
+  }
+
+  .Head-container h1 {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .qusition-container h1 {
+    font-size: 18px;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  button {
+    width: 100%;
+    margin: 8px 0;
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+
+  .card.jump {
+    font-size: 14px;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .video-popup video {
+    width: 100%;
+    max-width: 320px;
+    border-radius: 10px;
+  }
+
+  .finish-screen h1 {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .finish-screen h2 {
+    font-size: 18px;
+    text-align: center;
+  }
+
+.gift-button {
+  background: linear-gradient(135deg, #ff4d6d, #ffb3c1);
+  border: none;
+  color: white;
+  font-size: 18px;
+  padding: 14px 25px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 20px;
+  box-shadow: 0 8px 20px rgba(255, 77, 109, 0.3);
+  transition: all 0.3s ease;
+}
+
+.gift-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(255, 77, 109, 0.5);
+}
+
+.gift-button:active {
+  transform: scale(0.95);
+}
+.gift-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 20px;
+
+  background: white;
+  max-width: 700px;
+        width: 219%;
+
+  padding: 30px;
+  border-radius: 20px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.your {
+  color: #333;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.8;
+
+  text-align: justify;
+  white-space: normal;
+
+  font-family: "Poppins", sans-serif;
+
+  margin: 0;
+}
+}
