@@ -254,16 +254,15 @@ export default function Body() {
           </div>
         )}
 
-        {videoSrc && (
+     {videoSrc && (
           <div className="video-popup">
             <video
+              key={videoSrc}
               src={videoSrc}
               autoPlay
               muted
               playsInline
-              controls
               preload="auto"
-              width="350"
             />
           </div>
         )}
