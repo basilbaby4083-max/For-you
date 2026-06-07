@@ -1,15 +1,22 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "../styles/Body.css";
+
+import cringeImg from "../assets/cringImg.jpg";
+import happyImg from "../assets/HappyImg.jpg";
+import jokingImg from "../assets/JokingImg.jpg";
 
 export default function Body() {
   const [message, setMessage] = useState("");
   const [score, setScore] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [isLocked, setIsLocked] = useState(false);
-
-  const [videoSrc, setVideoSrc] = useState(null);
+  const [popupImg, setPopupImg] = useState(null);
   const [showGift, setShowGift] = useState(false);
+  const [waitMsg, setWaitMsg] = useState("");
 
+  const audioRef = useRef(null);
+
+  
 const questions = [
     {
       question: "What will you do if I text you 'I miss you'? 🌙",
@@ -173,31 +180,20 @@ const questions = [
         { text: "Forget you 😶", msg: "cold heart 💀", correct: false },
       ],
     }
-  ];
+  ]
 
-           
-const playVideo = (src) => {
-  setVideoSrc(src);
-
-  setTimeout(() => {
-    const video = document.querySelector("video");
-
-    if (video) {
-      video.muted = false;   // unmute try
-      video.volume = 1;
-
-      const playPromise = video.play();
-
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // fallback: keep muted if blocked
-          video.muted = true;
-          video.play();
-        });
-      }
+  // 🎧 AUDIO PLAYER (stops previous audio)
+  const playAudio = (src) => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
     }
-  }, 500);
-};
+
+    const audio = new Audio(src);
+    audioRef.current = audio;
+    audio.play().catch(() => {});
+    return audio;
+  };
 
   const handleClick = (option) => {
     if (isLocked) return;
@@ -207,54 +203,95 @@ const playVideo = (src) => {
 
     if (option.correct) {
       setScore((prev) => prev + 1);
-      playVideo("/smile.mp4");
-    } else {
-      playVideo("/ayoo.mp4");
-    }
 
-    setTimeout(() => {
-      setMessage("");
-      setVideoSrc(null);
-      setQuestionIndex((prev) => prev + 1);
-      setIsLocked(false);
-    }, 3000);
+      setWaitMsg("Wait Minute 🤚🏻");
+
+      const happyImages = [happyImg, jokingImg];
+      const randomImg =
+        happyImages[Math.floor(Math.random() * happyImages.length)];
+
+      setPopupImg(randomImg);
+
+      const audio = playAudio("/happy.mp3");
+
+      // 👉 next question ONLY after audio ends
+      audio.onended = () => {
+        setWaitMsg("");
+        setMessage("");
+        setPopupImg(null);
+        setIsLocked(false);
+        setQuestionIndex((prev) => prev + 1);
+      };
+    } else {
+      const wrongReactions = [
+        { img: cringeImg, audio: "/cring.mp3" },
+      ];
+
+      const randomReaction =
+        wrongReactions[Math.floor(Math.random() * wrongReactions.length)];
+
+      setPopupImg(randomReaction.img);
+      playAudio(randomReaction.audio);
+
+      setTimeout(() => {
+        setMessage("");
+        setPopupImg(null);
+        setIsLocked(false);
+      }, 2000);
+    }
   };
 
-  if (questionIndex >= questions.length) {
+  const currentQ = questions[questionIndex];
+
+  // 🎉 END SCREEN
+  if (!currentQ) {
     return (
       <div className="main-container finish-screen">
         <h1>🎉 Quiz Finished!</h1>
-        <h2>Your Score: {score}/{questions.length}</h2>
+        <h2>
+          Your Score: {score}/{questions.length}
+        </h2>
 
         {!showGift ? (
-          <button className="gift-button" onClick={() => setShowGift(true)}>
+          <button onClick={() => setShowGift(true)} className="gift-button">
             🎁 Open Your Gift
           </button>
         ) : (
           <div className="gift-box">
+ ];
  <p className="your">You are someone who slowly became a special part of my life without even trying. The way you talk, the way you care, and the way you stay in my thoughts makes everything feel different and better. I may not always say it perfectly, but I truly care about you more than words can show. You matter to me in a way that feels calm, real, and important.
 
               And honestly, I don’t want to just keep these feelings inside anymore. I want to be open with you — I like you, and I want to be someone who stands beside you, supports you, and cares for you in every small and big moment. If you feel even a little the same, I would love to grow something beautiful with you, step by step, together.❤️‍🔥🥰</p>
+
           </div>
         )}
       </div>
     );
   }
 
-  const currentQ = questions[questionIndex];
-
   return (
     <div className="main-container">
-
       <div className="Head-container">
-        <h1>Score {score}/{questions.length}</h1>
+        <h1>
+          Score {score}/{questions.length}
+        </h1>
       </div>
+
+      {waitMsg && (
+        <div className="wait-popup">
+          <h2>{waitMsg}</h2>
+        </div>
+      )}
 
       <div className="qusition-container">
         <h1>{currentQ.question}</h1>
 
-        {currentQ.options.map((opt, index) => (
-          <button key={index} onClick={() => handleClick(opt)} disabled={isLocked}>
+        {currentQ.options.map((opt, i) => (
+          <button
+            key={i}
+            onClick={() => handleClick(opt)}
+            disabled={isLocked}
+          >
             {opt.text}
           </button>
         ))}
@@ -265,19 +302,11 @@ const playVideo = (src) => {
           </div>
         )}
 
-        {videoSrc && (
-          <div className="video-popup">
-            <video
-              key={videoSrc}
-              src={videoSrc}
-              autoPlay
-              playsInline
-              preload="auto"
-              controls
-            />
+        {popupImg && (
+          <div className="image-popup">
+            <img src={popupImg} alt="reaction" />
           </div>
         )}
-
       </div>
     </div>
   );
