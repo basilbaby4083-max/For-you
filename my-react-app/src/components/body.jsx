@@ -195,51 +195,50 @@ const questions = [
     return audio;
   };
 
-  const handleClick = (option) => {
-    if (isLocked) return;
+const handleClick = (option) => {
+  if (isLocked) return;
 
-    setIsLocked(true);
-    setMessage(option.msg);
+  setIsLocked(true);
+  setMessage(option.msg);
 
-    if (option.correct) {
-      setScore((prev) => prev + 1);
+  if (option.correct) {
+    setScore((prev) => prev + 1);
 
-      setWaitMsg("Wait Minute 🤚🏻");
+    setWaitMsg("Wait Minute 🤚🏻");
 
-      const happyImages = [happyImg, jokingImg];
-      const randomImg =
-        happyImages[Math.floor(Math.random() * happyImages.length)];
+    const happyImages = [happyImg, jokingImg];
+    const randomImg =
+      happyImages[Math.floor(Math.random() * happyImages.length)];
 
-      setPopupImg(randomImg);
+    setPopupImg(randomImg);
 
-      const audio = playAudio("/happy.mp3");
+    const audio = playAudio("/happy.mp3");
 
-      // 👉 next question ONLY after audio ends
-      audio.onended = () => {
-        setWaitMsg("");
-        setMessage("");
-        setPopupImg(null);
-        setIsLocked(false);
-        setQuestionIndex((prev) => prev + 1);
-      };
-    } else {
-      const wrongReactions = [
-        { img: cringeImg, audio: "/cring.mp3" },
-      ];
+    audio.onended = () => {
+      setWaitMsg("");
+      setMessage("");
+      setPopupImg(null);
+      setIsLocked(false);
+      setQuestionIndex((prev) => prev + 1);
+    };
+  } else {
+    setWaitMsg("Wrong Answer 😂");
 
-      const randomReaction =
-        wrongReactions[Math.floor(Math.random() * wrongReactions.length)];
+    setPopupImg(cringeImg);
 
-      setPopupImg(randomReaction.img);
-      playAudio(randomReaction.audio);
+    const audio = playAudio("/cring.mp3");
 
-      setTimeout(() => {
-        setMessage("");
-        setPopupImg(null);
-        setIsLocked(false);
-      }, 2000);
-    }
-  };
+    audio.onended = () => {
+      setWaitMsg("");
+      setMessage("");
+      setPopupImg(null);
+      setIsLocked(false);
+
+      // Skip to next question
+      setQuestionIndex((prev) => prev + 1);
+    };
+  }
+};
 
   const currentQ = questions[questionIndex];
 
@@ -258,7 +257,7 @@ const questions = [
           </button>
         ) : (
           <div className="gift-box">
- ];
+ 
  <p className="your">You are someone who slowly became a special part of my life without even trying. The way you talk, the way you care, and the way you stay in my thoughts makes everything feel different and better. I may not always say it perfectly, but I truly care about you more than words can show. You matter to me in a way that feels calm, real, and important.
 
               And honestly, I don’t want to just keep these feelings inside anymore. I want to be open with you — I like you, and I want to be someone who stands beside you, supports you, and cares for you in every small and big moment. If you feel even a little the same, I would love to grow something beautiful with you, step by step, together.❤️‍🔥🥰</p>
